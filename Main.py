@@ -9,9 +9,8 @@ base_url = "http://www.espn.com/"
 
 # default to return next game: team, game
 # input: team name as a string
-# input: start will be an integer indicating how many past games
-# input: end will be in integer indicating how many future games
-def get_schedule(team, start, end):
+# output: list of lists containing: date, opponent, score/date
+def generate_schedule(team):
     schedule = []
 
     team_code = DataDictionary.team_codes.get(team)
@@ -34,6 +33,16 @@ def get_schedule(team, start, end):
 
     for line in schedule:
         print(str(line) + "\n")
+
+    return schedule
+
+
+# return next or past x games
+def get_schedule(team, start, end):
+
+    generate_schedule("torontoraptors")
+
+    pass
 
 
 get_schedule('torontoraptors', None, None)
