@@ -12,6 +12,8 @@ base_url = "http://www.espn.com/"
 # output: list of lists containing: date, opponent, score/date
 def generate_schedule(team):
     schedule = []
+    played_games = []
+    upcoming_games = []
 
     team_code = DataDictionary.team_codes.get(team)
 
@@ -29,20 +31,30 @@ def generate_schedule(team):
     for tr in soup.find_all('tr')[4:]:
         tds = tr.find_all('td')
 
-        schedule.append([tds[0].text, tds[1].text.strip('vs@ '), tds[2].text.strip()])
+        schedule.append([tds[0].text, tds[1].text.strip('@vs '), tds[2].text.strip()])
 
-    for line in schedule:
-        print(str(line) + "\n")
+    for i, game in enumerate(schedule):
+        if game[0].lower() == 'date':
+            played_games = schedule[:i]
+            upcoming_games = schedule[i+1:]
+            break
 
-    return schedule
+    return played_games, upcoming_games
 
 
 # return next or past x games
 def get_schedule(team, start, end):
 
-    generate_schedule("torontoraptors")
+    played_games, upcoming_games = generate_schedule(team)
 
-    pass
+    for game in played_games:
+        print(str(game) + "\n")
+
+    print("\n\n\n\n")
+
+    for game in upcoming_games:
+        print(str(game) + "\n")
+
 
 
 get_schedule('torontoraptors', None, None)
