@@ -1,5 +1,35 @@
-teamCodes = {
-    'torontoraptors': 'tor',
+# to-do: make them searchable by city, name, or abbre: eg 'hawks', 'raps', 'boston'
+
+# team codes for url generation
+team_codes = {
+    'atlantahawks': 'atl',
     'bostonceltics': 'bos',
-    'dallasmavericks': 'dal'
+    'brooklynnets': 'bkn',
+    'charlottehornets': 'cha',
+    'chicagobulls': 'chi',
+    'clevelandcavaliers': 'cle',
+    'dallasmavericks': 'dal',
+    'denvernuggets': 'den',
+    'detroitpistons': 'det',
+    'goldenstatewarriors': 'gs',
+    'houstonrockets': 'hou',
+    'indianapacers': 'ind',
+    'laclippers': 'lac',
+    'losangeleslakers': 'lal',
+    'memphisgrizzlies': 'mem',
+    'miamiheat': 'mia',
+    'milwaukeebucks': 'mil',
+    'minnesotatimberwolves': 'min',
+    'neworleanspelicans': 'no',
+    'newyorkknicks': 'ny',
+    'oklahomacitythunder': 'okc',
+    'orlandomagic': 'orl',
+    'philadelphia76ers': 'phi',
+    'phoenixsuns': 'phx',
+    'portlandtrailblazers': 'por',
+    'sacramentokings': 'sac',
+    'sanantoniaspurs': 'sa',
+    'torontoraptors': 'tor',
+    'utahjazz': 'utah',
+    'washingtonwizards': 'wsh'
 }
