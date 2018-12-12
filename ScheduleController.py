@@ -55,14 +55,14 @@ def get_next_schedule(team, num):
     # by default will return the next game
     if not num:
         next_game = upcoming_games[0]
-        location, opponent = process_string(next_game[1])
+        location, opponent = __process_string(next_game[1])
 
-        return "\nThe next game is on %s against %s(%s) at %s." % (next_game[0], opponent, location, next_game[2])
+        return "\nThe next game is on %s against %s (%s) at %s." % (next_game[0], opponent, location, next_game[2])
     else:
         output = "Next %i games:\n" % num
         for i in range(num):
-            location, opponent = process_string(upcoming_games[i][1])
-            output += "%s: %s game against %s at %s.\n" % (upcoming_games[i][0], opponent, location,
+            location, opponent = __process_string(upcoming_games[i][1])
+            output += "%s: %s game against %s at %s.\n" % (upcoming_games[i][0], location, opponent,
                                                            upcoming_games[i][2])
 
         return output
@@ -71,7 +71,7 @@ def get_next_schedule(team, num):
 # sanitizes string and parses into opponent and home/away
 # input: scraped string
 # output: opponent and if it's home or away
-def process_string(text):
+def __process_string(text):
 
     if "@" in text:
         location = "away"
@@ -80,7 +80,7 @@ def process_string(text):
 
     opponent = DataDictionary.short_names[" ".join(text.split()[1:]).strip().lower()]
 
-    return opponent, location
+    return location, opponent
 
 
 print(get_next_schedule('toronto', None))
