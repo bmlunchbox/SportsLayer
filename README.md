@@ -1,7 +1,8 @@
-SportsLayer
+###### **SportsLayer**
 
--- readme to be formatted and updated at a later time --
+Set of APIs to grab real-time sports data from ESPN.
 
-Set of APIs to grab real-time sports data.
+To aid with future project of retrieving sports scores and statistics using Twilio.
 
-To aid with future project of being able to text and retrieve sports scores/stats using Twilio.
+**Disclaimer**:
+The use of information provided by ESPN is solely for personal use. 
