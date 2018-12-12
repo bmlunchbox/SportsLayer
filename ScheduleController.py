@@ -9,11 +9,11 @@ played_games = []
 upcoming_games = []
 
 
-# default to return next game: team, game
+# get the team schedule and store it locally
 # input: team name as a string
-# output: list of lists containing: date, opponent, score/date
+# output: none
 def generate_schedule(team):
-    global played_games, upcoming_games
+    global played_games, upcoming_games, base_url
     schedule = []
 
     team_code = DataDictionary.team_codes.get(team)
@@ -32,8 +32,9 @@ def generate_schedule(team):
     for tr in soup.find_all('tr')[4:]:
         tds = tr.find_all('td')
 
-        schedule.append([tds[0].text, tds[1].text.strip('@vs '), tds[2].text.strip()])
+        schedule.append([tds[0].text, tds[1].text.strip(), tds[2].text.strip()])
 
+    # process the raw list into played and upcoming games
     for i, game in enumerate(schedule):
         if game[0].lower() == 'date':
             played_games = schedule[:i]
@@ -41,18 +42,47 @@ def generate_schedule(team):
             break
 
 
-# return next or past x games
-def get_next_schedule(team, next):
+# return the next few games as a user string
+# input: team name (string) and number of games queried (int)
+# output: user string (string)
+def get_next_schedule(team, num):
     global upcoming_games
 
+    # if not already called, generate schedule
     if not upcoming_games:
         generate_schedule(team)
 
-    if not next:
+    # by default will return the next game
+    if not num:
         next_game = upcoming_games[0]
-        return "\nThe next game will be on %s against the %s at %s." % (next_game[0], next_game[1], next_game[2])
+        location, opponent = process_string(next_game[1])
+
+        return "\nThe next game is on %s against %s(%s) at %s." % (next_game[0], opponent, location, next_game[2])
     else:
-        pass
+        output = "Next %i games:\n" % num
+        for i in range(num):
+            location, opponent = process_string(upcoming_games[i][1])
+            output += "%s: %s game against %s at %s.\n" % (upcoming_games[i][0], opponent, location,
+                                                           upcoming_games[i][2])
+
+        return output
 
 
-print(get_next_schedule('torontoraptors', None))
+# sanitizes string and parses into opponent and home/away
+# input: scraped string
+# output: opponent and if it's home or away
+def process_string(text):
+
+    if "@" in text:
+        location = "away"
+    else:
+        location = "home"
+
+    opponent = DataDictionary.short_names[" ".join(text.split()[1:]).strip().lower()]
+
+    return opponent, location
+
+
+print(get_next_schedule('toronto', None))
+print("\n")
+print(get_next_schedule('toronto', 3))
