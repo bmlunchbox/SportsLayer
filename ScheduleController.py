@@ -5,15 +5,16 @@ from bs4 import BeautifulSoup
 
 
 base_url = "http://www.espn.com/"
+played_games = []
+upcoming_games = []
 
 
 # default to return next game: team, game
 # input: team name as a string
 # output: list of lists containing: date, opponent, score/date
 def generate_schedule(team):
+    global played_games, upcoming_games
     schedule = []
-    played_games = []
-    upcoming_games = []
 
     team_code = DataDictionary.team_codes.get(team)
 
@@ -39,22 +40,19 @@ def generate_schedule(team):
             upcoming_games = schedule[i+1:]
             break
 
-    return played_games, upcoming_games
-
 
 # return next or past x games
-def get_schedule(team, start, end):
+def get_next_schedule(team, next):
+    global upcoming_games
 
-    played_games, upcoming_games = generate_schedule(team)
+    if not upcoming_games:
+        generate_schedule(team)
 
-    for game in played_games:
-        print(str(game) + "\n")
-
-    print("\n\n\n\n")
-
-    for game in upcoming_games:
-        print(str(game) + "\n")
-
+    if not next:
+        next_game = upcoming_games[0]
+        return "\nThe next game will be on %s against the %s at %s." % (next_game[0], next_game[1], next_game[2])
+    else:
+        pass
 
 
-get_schedule('torontoraptors', None, None)
+print(get_next_schedule('torontoraptors', None))
