@@ -55,23 +55,41 @@ def get_next_schedule(team, num):
     # by default will return the next game
     if not num:
         next_game = upcoming_games[0]
-        location, opponent = __process_string(next_game[1])
+        location, opponent = __process_name(next_game[1])
 
         return "\nThe next game is on %s against %s (%s) at %s." % (next_game[0], opponent, location, next_game[2])
+
     else:
         output = "Next %i games:\n" % num
         for i in range(num):
-            location, opponent = __process_string(upcoming_games[i][1])
+            location, opponent = __process_name(upcoming_games[i][1])
             output += "%s: %s game against %s at %s.\n" % (upcoming_games[i][0], location, opponent,
                                                            upcoming_games[i][2])
-
         return output
+
+
+def get_past_games(team, num):
+    global played_games
+
+    if not played_games:
+        generate_schedule(team)
+
+    if not num:
+        last_game = played_games[-1]
+
+        location, opponent = __process_name(last_game[1])
+        result, score = __process_score(last_game[2])
+
+        return "The last game was a %s %s at %s against %s on %s." % (score, result, location, opponent, last_game[0])
+
+    else:
+        output = "Past %i game scores: " % num
 
 
 # sanitizes string and parses into opponent and home/away
 # input: scraped string
 # output: opponent and if it's home or away
-def __process_string(text):
+def __process_name(text):
 
     if "@" in text:
         location = "away"
@@ -83,6 +101,27 @@ def __process_string(text):
     return location, opponent
 
 
-print(get_next_schedule('toronto', None))
-print("\n")
-print(get_next_schedule('toronto', 3))
+def __process_score(text):
+    overtime = ''
+
+    if text[-2:-1].lower() == 'ot':
+        overtime = 'overtime '
+
+    if text[0].lower() == 'w':
+        result = overtime + 'win'
+    else:
+        result = overtime + 'loss'
+
+    score = text[1:]
+
+    return result, score
+
+
+print(get_past_games("toronto", None))
+# print("\n")
+# print(get_past_games("toronto", 4))
+
+
+# todo: unit test functions - especially the scrape call (expected output vs output)
+# todo: next up create something to access these controllers
+# todo: save the schedule in a database
