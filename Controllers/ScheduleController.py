@@ -1,56 +1,13 @@
-# import libraries
-import urllib.request
+from Data import SoupService
 from Data import DataDictionary
-from bs4 import BeautifulSoup
-
-
-base_url = "http://www.espn.com/"
-played_games = []
-upcoming_games = []
-
-
-# get the team schedule and store it locally
-# input: team name as a string
-# output: none
-def generate_schedule(team):
-    global played_games, upcoming_games, base_url
-    schedule = []
-
-    team_code = DataDictionary.team_codes.get(team)
-
-    # generate the url
-    page_url = base_url + 'nba/team/schedule/_/name/'
-    page_url += str(team_code)
-
-    # create the request
-    page = urllib.request.urlopen(page_url).read()
-
-    # gather the html -- formatted
-    soup = BeautifulSoup(page, 'html.parser')
-
-    # go through the table and grab dates, opponent, score or time
-    for tr in soup.find_all('tr')[4:]:
-        tds = tr.find_all('td')
-
-        schedule.append([tds[0].text, tds[1].text.strip(), tds[2].text.strip()])
-
-    # process the raw list into played and upcoming games
-    for i, game in enumerate(schedule):
-        if game[0].lower() == 'date':
-            played_games = schedule[:i]
-            upcoming_games = schedule[i+1:]
-            break
 
 
 # return the next few games as a user string
 # input: team name (string) and number of games queried (int)
 # output: user string (string)
 def get_next_schedule(team, num):
-    global upcoming_games
-
-    # if not already called, generate schedule
-    if not upcoming_games:
-        generate_schedule(team)
+    SoupService.generate_schedule(team)
+    upcoming_games = SoupService.upcoming_games
 
     # by default will return the next game
     if not num:
@@ -69,10 +26,9 @@ def get_next_schedule(team, num):
 
 
 def get_past_games(team, num):
-    global played_games
 
-    if not played_games:
-        generate_schedule(team)
+    SoupService.generate_schedule(team)
+    played_games = SoupService.played_games
 
     if not num:
         last_game = played_games[-1]
@@ -84,7 +40,7 @@ def get_past_games(team, num):
 
     else:
         output = "Past %i game scores:\n" % num
-        counter = len(played_games) - 1
+        counter = len(played_games)-1
         for i in range(num):
             location, opponent = __process_name(played_games[counter][1])
             result, score = __process_score(played_games[counter][2])
@@ -126,11 +82,6 @@ def __process_score(text):
     return result, score
 
 
-print(get_past_games("toronto", None))
-# print("\n")
-print(get_past_games("toronto", 4))
-
-
-# todo: unit test functions - especially the scrape call (expected output vs output)
-# todo: next up create something to access these controllers
-# todo: save the schedule in a database
+# todo: error check
+# todo: save the schedule in a database ?
+# todo: live game scraper
