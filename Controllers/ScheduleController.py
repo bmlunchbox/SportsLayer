@@ -2,7 +2,7 @@ from Data import SoupService
 from Data import DataDictionary
 
 
-# return the next few games as a user string
+# return the next games in schedule
 # input: team name (string) and number of games queried (int)
 # output: user string (string)
 def get_next_schedule(team, num):
@@ -25,6 +25,9 @@ def get_next_schedule(team, num):
         return output
 
 
+# return the past game results
+# input: team name (string) and number of games queried (int)
+# output: user string (string)
 def get_past_games(team, num):
 
     SoupService.generate_schedule(team)
@@ -53,7 +56,7 @@ def get_past_games(team, num):
 
 # sanitizes string and parses into opponent and home/away
 # input: scraped string
-# output: opponent and if it's home or away
+# output: opponent and home court location
 def __process_name(text):
 
     if "@" in text:
@@ -66,6 +69,9 @@ def __process_name(text):
     return location, opponent
 
 
+# sanitizes score and parses into game results
+# input: scraped string in form of w###-###ot
+# output: result and score
 def __process_score(text):
     overtime = ''
 
