@@ -83,7 +83,16 @@ def get_past_games(team, num):
         return "The last game was a %s %s at %s against %s on %s." % (score, result, location, opponent, last_game[0])
 
     else:
-        output = "Past %i game scores: " % num
+        output = "Past %i game scores:\n" % num
+        counter = len(played_games) - 1
+        for i in range(num):
+            location, opponent = __process_name(played_games[counter][1])
+            result, score = __process_score(played_games[counter][2])
+
+            output += "%s: %s %s against %s at %s.\n" % (played_games[counter][0], score, result, opponent, location)
+            counter -= 1
+
+        return output
 
 
 # sanitizes string and parses into opponent and home/away
@@ -119,7 +128,7 @@ def __process_score(text):
 
 print(get_past_games("toronto", None))
 # print("\n")
-# print(get_past_games("toronto", 4))
+print(get_past_games("toronto", 4))
 
 
 # todo: unit test functions - especially the scrape call (expected output vs output)
