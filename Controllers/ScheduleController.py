@@ -86,8 +86,3 @@ def __process_score(text):
     score = text[1:]
 
     return result, score
-
-
-# todo: error check
-# todo: save the schedule in a database ?
-# todo: live game scraper
