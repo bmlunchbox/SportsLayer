@@ -39,3 +39,8 @@ def generate_schedule(team):
             played_games = schedule[:i]
             upcoming_games = schedule[i+1:]
             break
+
+
+def generate_standings():
+    standings = []
+
