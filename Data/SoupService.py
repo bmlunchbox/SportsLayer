@@ -18,8 +18,7 @@ def generate_schedule(team):
     team_code = DataDictionary.team_codes.get(team)
 
     # generate the url
-    page_url = 'http://www.espn.com/nba/team/schedule/_/name/'
-    page_url += str(team_code)
+    page_url = 'http://www.espn.com/nba/team/schedule/_/name/' + str(team_code)
 
     # create the request
     page = urllib.request.urlopen(page_url).read()
@@ -43,4 +42,24 @@ def generate_schedule(team):
 
 def generate_standings():
     standings = []
+    entered = []
 
+    url = "http://www.espn.com/nba/standings"
+    page = urllib.request.urlopen(url)
+
+    soup = BeautifulSoup(page, 'html.parser')
+
+    for tr in soup.find_all('tr'):
+        rows = tr.find_all("span", {"class": "hide-mobile"})
+
+        rank = 1
+        for row in rows:
+            team = row.contents[0].string
+
+            if team not in entered:
+                standings.append([team, rank])
+                entered.append(team)
+                if rank == 15:
+                    rank = 1
+                else:
+                    rank += 1
