@@ -42,46 +42,47 @@ def generate_schedule(team):
 
 def generate_standings():
     standings = []
-    tracker = []
+    team_tracker = []
 
     url = "http://www.espn.com/nba/standings"
     page = urllib.request.urlopen(url)
 
     soup = BeautifulSoup(page, 'html.parser')
 
-    for tr in soup.find_all('tr'):
-        # find the table containing the team names
-        rows = tr.find_all("span", {"class": "hide-mobile"})
+    # find the table containing the team names
+    rows = soup.find_all("span", {"class": "hide-mobile"})
 
-        rank = 1
+    rank = 1
 
-        # for each entry in the table
-        for row in rows:
-            # get the team name
-            team = row.contents[0].string
+    # for each entry in the table
+    for row in rows:
+        # get the team name
+        team = row.contents[0].string
 
-            # if it has already been entered
-            if team not in tracker:
-                # enter it into the list and the tracker
-                standings.append([team, rank])
-                tracker.append(team)
+        # if it has already been entered
+        if team not in team_tracker:
+            # enter it into the list and the tracker
+            standings.append([team, rank])
+            team_tracker.append(team)
 
-                # increase or reset rank
-                if rank == 15:
-                    rank = 1
-                else:
-                    rank += 1
+            # increase or reset rank
+            if rank == 15:
+                rank = 1
+            else:
+                rank += 1
 
-        stats = tr.find_all("span", {"class": "stat-cell"})
-        temp = []
-        counter = 0
-        for s in stats:
-            if counter > 12:
-                print(temp)
-                counter = 0
-                del temp[:]
+    # grab all the stats in the table
+    stats = soup.find_all("span", {"class": "stat-cell"})
 
-            temp.append(s.contents[0])
-            counter += 1
+    # extract from html
+    processed = []
+    for s in stats:
+        processed.append(s.contents[0])
 
+    # bundle them by team
+    index = 0
+    for i in range(0, len(processed), 13):
+        standings[index].extend(processed[i:i + 13])
+        index += 1
 
+    return standings
