@@ -85,4 +85,7 @@ def generate_standings():
         standings[index].extend(processed[i:i + 13])
         index += 1
 
+    # list of lists where each list is a bundle of a team's stats
+    # structure:
+    # [team, rank, wins, losses, percentage, home_rec, away_rec, div_rec, con_rec, ppg, opp_ppg, pt_diff, streak, L10]
     return standings
