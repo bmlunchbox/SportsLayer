@@ -89,3 +89,8 @@ def generate_standings():
     # structure:
     # [team, rank, wins, losses, percentage, home_rec, away_rec, div_rec, con_rec, ppg, opp_ppg, pt_diff, streak, L10]
     return standings
+
+
+# on the urllib.request.urlopen(url)
+# urllib.error.URLError: <urlopen error [Errno 11001] getaddrinfo failed>
+# should package as JSON either here or in controllers

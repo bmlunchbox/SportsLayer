@@ -29,7 +29,6 @@ def get_next_schedule(team, num):
 # input: team name (string) and number of games queried (int)
 # output: user string (string)
 def get_past_games(team, num):
-
     SoupService.generate_schedule(team)
     played_games = SoupService.played_games
 
