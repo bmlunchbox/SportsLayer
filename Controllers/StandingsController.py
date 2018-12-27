@@ -49,7 +49,6 @@ def get_playoff_teams(conference):
 
 def get_team(team):
     standings = SoupService.generate_standings()
-    output = ""
 
     team_stats = []
     for sublist in standings:
