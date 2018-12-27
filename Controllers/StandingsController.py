@@ -1,4 +1,6 @@
 from Data import SoupService
+from Data import DataDictionary
+from operator import itemgetter
 
 
 def get_conference_standings(conference):
@@ -17,7 +19,15 @@ def get_conference_standings(conference):
 
 
 def get_all():
-    return ""
+    standings = SoupService.generate_standings()
+    output = ""
+
+    sorted_list = sorted(standings, key=itemgetter(4), reverse=True)
+
+    for i, team in enumerate(sorted_list):
+        output += "%i: %s (%s-%s)\n" % (i+1, team[0], team[2], team[3])
+
+    return output
 
 
 def get_playoff_teams(conference):
@@ -38,4 +48,17 @@ def get_playoff_teams(conference):
 
 
 def get_team(team):
-    return ""
+    standings = SoupService.generate_standings()
+    output = ""
+
+    team_stats = []
+    for sublist in standings:
+        if sublist[0] == DataDictionary.nba_string[team]:
+            team_stats = sublist
+            break
+
+    output = "%s (%s): %s wins, %s losses" % (team_stats[0], team_stats[1], team_stats[2], team_stats[3])
+
+    return output
+
+# to do note: cache on the client side
