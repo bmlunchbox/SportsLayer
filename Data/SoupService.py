@@ -91,6 +91,21 @@ def generate_standings():
     return standings
 
 
+def generate_roster(team):
+    roster = []
+    url = "http://www.espn.com/nba/team/roster/_/name/tor"
+
+
+def generate_injuries(team):
+    injuries = []
+    url = "http://www.espn.com/nba/team/injuries/_/name/tor"
+
+
+def generate_depth(team):
+    depth = []
+    url = "http://www.espn.com/nba/team/depth/_/name/tor"
+
+
 # on the urllib.request.urlopen(url)
 # urllib.error.URLError: <urlopen error [Errno 11001] getaddrinfo failed>
 # should package as JSON either here or in controllers
