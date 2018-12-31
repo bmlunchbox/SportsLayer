@@ -12,14 +12,14 @@ def get_next_schedule(team, num):
     # by default will return the next game
     if not num:
         next_game = upcoming_games[0]
-        location, opponent = __process_name(next_game[1])
+        location, opponent = __process_name__(next_game[1])
 
         return "\nThe next game is on %s against %s (%s) at %s." % (next_game[0], opponent, location, next_game[2])
 
     else:
         output = "Next %i games:\n" % num
         for i in range(num):
-            location, opponent = __process_name(upcoming_games[i][1])
+            location, opponent = __process_name__(upcoming_games[i][1])
             output += "%s: %s game against %s at %s.\n" % (upcoming_games[i][0], location, opponent,
                                                            upcoming_games[i][2])
         return output
@@ -35,8 +35,8 @@ def get_past_games(team, num):
     if not num:
         last_game = played_games[-1]
 
-        location, opponent = __process_name(last_game[1])
-        result, score = __process_score(last_game[2])
+        location, opponent = __process_name__(last_game[1])
+        result, score = __process_score__(last_game[2])
 
         return "The last game was a %s %s at %s against %s on %s." % (score, result, location, opponent, last_game[0])
 
@@ -44,8 +44,8 @@ def get_past_games(team, num):
         output = "Past %i game scores:\n" % num
         counter = len(played_games)-1
         for i in range(num):
-            location, opponent = __process_name(played_games[counter][1])
-            result, score = __process_score(played_games[counter][2])
+            location, opponent = __process_name__(played_games[counter][1])
+            result, score = __process_score__(played_games[counter][2])
 
             output += "%s: %s %s against %s at %s.\n" % (played_games[counter][0], score, result, opponent, location)
             counter -= 1
@@ -56,7 +56,7 @@ def get_past_games(team, num):
 # sanitizes string and parses into opponent and home/away
 # input: scraped string
 # output: opponent and home court location
-def __process_name(text):
+def __process_name__(text):
 
     if "@" in text:
         location = "away"
@@ -71,7 +71,7 @@ def __process_name(text):
 # sanitizes score and parses into game results
 # input: scraped string in form of w###-###ot
 # output: result and score
-def __process_score(text):
+def __process_score__(text):
     overtime = ''
 
     if text[-2:-1].lower() == 'ot':
